@@ -63,19 +63,17 @@ function buildUrl($params)
 
 /**
  * @param array $items
+ * @param int $page
+ * @param int $item_pre_page
  * @return array
  */
-function get_pagination_info(array $items)
+function get_pagination_info(array $items, int $page, int $item_pre_page)
 {
-    $item_pre_page = !empty($_GET['item_pre_page']) ? $_GET['item_pre_page'] : 5;
-//    $page =  !empty($_GET['page']) ? $_GET['page'] : 1;
-//    $airports = array_slice($items, ($page -1 ) * $item_pre_page, $item_pre_page);
     $last_page = floor(count($items) / $item_pre_page);
-
 
     $pagination = [
         'item_pre_page' => $item_pre_page,
-        'page' => !empty($_GET['page']) ? $_GET['page'] : 1,
+        'page' => $page,
         'last_page' => $last_page,
         'first_paginator_item' => 1,
         'last_paginator_item' => $last_page,
@@ -102,7 +100,6 @@ function get_pagination_info(array $items)
             $pagination['last_paginator_item'] = $pagination['first_paginator_item'] + $item_pre_page - 1;
         }
     }
-
 
     return $pagination;
 }

@@ -43,7 +43,10 @@ $airports = sortItems($airports, $sort_by);
  * and apply pagination logic
  * (see Pagination task below)
  */
-$pagination_info = get_pagination_info($airports);
+$page = !empty($_GET['page']) ? $_GET['page'] : 1;
+$item_pre_page = !empty($_GET['item_pre_page']) ? $_GET['item_pre_page'] : 5;
+
+$pagination_info = get_pagination_info($airports, $page, $item_pre_page);
 
 $airports = array_slice($airports, ($pagination_info['page'] -1 ) * $pagination_info['item_pre_page'], $pagination_info['item_pre_page']);
 

@@ -50,8 +50,6 @@ function sayHelloArgumentWrapper($arg)
  */
 function countArguments()
 {
-
-
     return [
         'argument_count'  => func_num_args(),
         'argument_values' => func_get_args(),
