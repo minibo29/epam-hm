@@ -50,6 +50,8 @@ function sayHelloArgumentWrapper($arg)
  */
 function countArguments()
 {
+
+
     return [
         'argument_count'  => func_num_args(),
         'argument_values' => func_get_args(),
@@ -71,5 +73,19 @@ function countArguments()
  */
 function countArgumentsWrapper()
 {
-    // put your code here
+    $args = func_get_args();
+    $exception = true;
+
+    foreach ($args as $arg) {
+        if (!is_string($arg)) {
+            $exception = false;
+            break;
+        }
+    }
+
+    if ($exception) {
+        throw new InvalidArgumentException('countArgumentsWrapper function Exception');
+    }
+
+    return countArguments(...$args);
 }

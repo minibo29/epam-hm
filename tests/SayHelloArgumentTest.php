@@ -5,6 +5,9 @@ use PHPUnit\Framework\TestCase;
 class SayHelloArgumentTest extends TestCase
 {
 
+    /**
+     * @dataProvider positiveDataProvider
+     */
     public function testPositive($arg, $expected)
     {
         $this->assertEquals($expected, sayHelloArgument($arg));
@@ -17,7 +20,6 @@ class SayHelloArgumentTest extends TestCase
             ['Bob', 'Hello Bob'],
             [false, 'Hello '],
             [true, 'Hello 1'],
-            [[1, 2, 3], 'Hello Array'],
         ];
     }
 }

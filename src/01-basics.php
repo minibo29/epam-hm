@@ -65,7 +65,7 @@ function isLeapYear(int $year)
         throw new InvalidArgumentException('isLeapYear function only accepts the Year 1900 or more. Input was: ' . $year);
     }
 
-    return !($year%2);
+    return !($year%4);
 }
 
 /**

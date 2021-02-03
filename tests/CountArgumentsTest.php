@@ -5,9 +5,12 @@ use PHPUnit\Framework\TestCase;
 class CountArgumentsTest extends TestCase
 {
 
-    public function testPositive($expected, ...$arg)
+    /**
+     * @dataProvider positiveDataProvider
+     */
+    public function testPositive($expected, ...$args)
     {
-        $this->assertEquals($expected, countArguments(...$arg));
+        $this->assertEquals($expected, countArguments(...$args));
     }
 
     public function positiveDataProvider()
@@ -15,7 +18,7 @@ class CountArgumentsTest extends TestCase
         return [
             [
                 [
-                    'argument_count'  => 2,
+                    'argument_count' => 2,
                     'argument_values' => [
                         'First arg',
                         'Second arg',
@@ -25,7 +28,7 @@ class CountArgumentsTest extends TestCase
             ],
             [
                 [
-                    'argument_count'  => 1,
+                    'argument_count' => 1,
                     'argument_values' => [
                         'First arg',
                     ]
@@ -34,7 +37,7 @@ class CountArgumentsTest extends TestCase
             ],
             [
                 [
-                    'argument_count'  => 2,
+                    'argument_count' => 3,
                     'argument_values' => [
                         'First arg',
                         'Second arg',

@@ -2,14 +2,13 @@
 
 use PHPUnit\Framework\TestCase;
 
-class sayHelloArgumentWrapperTest extends TestCase
+class CountArgumentsWrapperTest extends TestCase
 {
 
     public function testNegative()
     {
         $this->expectException(InvalidArgumentException::class);
 
-        sayHelloArgumentWrapper([75]);
+        countArgumentsWrapper('First arg', 'Second arg', 'Third arg');
     }
-
 }
