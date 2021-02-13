@@ -46,6 +46,13 @@ class CountArgumentsTest extends TestCase
                 ],
                 'First arg', 'Second arg', 'Third arg'
             ],
+            [
+                [
+                    'argument_count' => 0,
+                    'argument_values' => [
+                    ]
+                ]
+            ],
         ];
     }
 }

@@ -22,7 +22,7 @@ function getMinuteQuarter(int $minute)
         $quarter = 'first';
     } elseif ($minute < 31) {
         $quarter = 'second';
-    } elseif ($minute > 30 && $minute < 46) {
+    } elseif ($minute < 46) {
         $quarter = 'third';
     } else {
         $quarter = 'fourth';
@@ -65,6 +65,15 @@ function isLeapYear(int $year)
         throw new InvalidArgumentException('isLeapYear function only accepts the Year 1900 or more. Input was: ' . $year);
     }
 
+    if (!($year%400)) {
+        return true;
+    }
+
+    if (!($year%100)) {
+        return false;
+    }
+
+
     return !($year%4);
 }
 
@@ -84,7 +93,7 @@ function isSumEqual(string $input)
     if (!is_numeric($input)) {
         throw new InvalidArgumentException('isSumEqual function only accepts integers. Input was: '. $input);
     }
-    if (strlen($input) < 6) {
+    if (strlen($input) != 6) {
         throw new InvalidArgumentException('Numeric Length should be 6 like 123456. Input was: '. $input);
     }
     $num1 = $input[0] + $input[1] + $input[2];

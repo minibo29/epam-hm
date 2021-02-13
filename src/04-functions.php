@@ -72,11 +72,11 @@ function countArguments()
 function countArgumentsWrapper()
 {
     $args = func_get_args();
-    $exception = true;
+    $exception = false;
 
     foreach ($args as $arg) {
         if (!is_string($arg)) {
-            $exception = false;
+            $exception = true;
             break;
         }
     }

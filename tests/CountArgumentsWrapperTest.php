@@ -9,6 +9,6 @@ class CountArgumentsWrapperTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        countArgumentsWrapper('First arg', 'Second arg', 'Third arg');
+        countArgumentsWrapper(1, 'Second arg', 'Third arg');
     }
 }

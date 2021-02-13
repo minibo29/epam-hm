@@ -16,8 +16,13 @@ class GetBrandNameTest extends TestCase
     {
         return [
             ['dolphin', 'The Dolphin'],
+            ['dolphIn', 'The Dolphin'],
+            ['DolphiN', 'The Dolphin'],
             ['alaska', 'Alaskalaska'],
+            ['Alaska', 'Alaskalaska'],
+            [' Alaska', 'Alaskalaska'],
             ['europe', 'Europeurope'],
+            ['europE', 'Europeurope'],
             ['php', 'Phphp'],
             ['the', 'The The'],
         ];

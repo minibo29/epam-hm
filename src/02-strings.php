@@ -56,6 +56,8 @@ function mirrorMultibyteString(string $input)
  */
 function getBrandName(string $noun)
 {
+    $noun = trim(strtolower($noun));
+
     $firsLetter = mb_substr($noun, 0, 1, "UTF-8");
     $lastLetter = mb_substr($noun, -1, 1, "UTF-8");
 
@@ -65,6 +67,6 @@ function getBrandName(string $noun)
         $brandName = 'The ' . ucfirst($noun);
     }
 
-    return trim($brandName);
+    return $brandName;
 
 }
