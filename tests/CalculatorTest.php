@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\ObjectReflector\ObjectReflector;
 use src\oop\Calculator;
 use src\oop\Commands\CommandInterface;
 
@@ -31,6 +32,14 @@ class CalculatorTest extends TestCase
             ->getMock();
     }
 
+    public function getAttribute($attribute)
+    {
+        $ObjectReflector = new ObjectReflector;
+        $attributes = $ObjectReflector->getAttributes($this->calc);
+
+        return isset($attributes[$attribute]) ? $attributes[$attribute] : null;
+    }
+
     /**
      * TODO: Check whether intents = []
      * TODO: Check whether value = 0.0
@@ -39,6 +48,9 @@ class CalculatorTest extends TestCase
      */
     public function testInitialCalcState()
     {
+
+        $this->assertEquals([], $this->getAttribute('intents'));
+        $this->assertEquals(0.0, $this->getAttribute('value'));
     }
 
     /**
@@ -48,6 +60,8 @@ class CalculatorTest extends TestCase
      */
     public function testAddCommandNegative()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->calc->addCommand([], new \src\oop\Commands\SumCommand());
     }
 
     /**
@@ -57,6 +71,11 @@ class CalculatorTest extends TestCase
      */
     public function testAddCommandPositive()
     {
+        $this->calc->addCommand('+', new \src\oop\Commands\SumCommand());
+        $ObjectReflector = new ObjectReflector;
+        $attributes = $ObjectReflector->getAttributes($this->calc);
+
+        $this->assertTrue(array_key_exists('+', $attributes['commands']));
     }
 
     /**
@@ -67,6 +86,10 @@ class CalculatorTest extends TestCase
      */
     public function testInit()
     {
+        $this->calc->init(1);
+
+        $this->assertEquals([], $this->getAttribute('intents'));
+        $this->assertEquals(1, $this->getAttribute('value'));
     }
 
     /**
@@ -76,6 +99,8 @@ class CalculatorTest extends TestCase
      */
     public function testComputeNegative()
     {
+        $this->calc->addCommand('+', new \src\oop\Commands\SumCommand());
+        $this->assertFalse($this->calc->hasCommand('-'));
     }
 
     /**
@@ -85,6 +110,11 @@ class CalculatorTest extends TestCase
      */
     public function testComputePositive()
     {
+        $this->calc->addCommand('+', new \src\oop\Commands\SumCommand());
+        $this->calc->init(1)
+            ->compute('+', 5);
+
+        $this->assertNotEmpty($this->getAttribute('intents'));
     }
 
     /**
@@ -98,6 +128,14 @@ class CalculatorTest extends TestCase
      */
     public function testGetResultPositive()
     {
+        $this->calc->addCommand('+', new \src\oop\Commands\SumCommand());
+
+         $this->calc->init(1)
+            ->compute('+', 5)
+            ->compute('+', 5);
+
+
+        return $this->assertEquals(11, $this->calc->getResult());
     }
 
     /**
@@ -111,6 +149,11 @@ class CalculatorTest extends TestCase
      */
     public function testGetResultNegative()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->calc->init(1)
+            ->compute('-', 5);
+
+        $this->calc->getResult();
     }
 
     /**
@@ -118,6 +161,17 @@ class CalculatorTest extends TestCase
      */
     public function testReplay()
     {
+        $this->calc->addCommand('+', new \src\oop\Commands\SumCommand());
+
+        $this->calc->init(1)
+            ->compute('+', 5)
+            ->compute('+', 5)
+            ->replay()
+            ->replay()
+        ;
+
+        return $this->assertEquals(4, count($this->getAttribute('intents')));
+
     }
 
     /**
@@ -125,6 +179,15 @@ class CalculatorTest extends TestCase
      */
     public function testUndo()
     {
+        $this->calc->addCommand('+', new \src\oop\Commands\SumCommand());
+
+        $this->calc->init(1)
+            ->compute('+', 5)
+            ->compute('+', 5)
+            ->undo()
+        ;
+
+        return $this->assertEquals(1, count($this->getAttribute('intents')));
     }
 
     /**

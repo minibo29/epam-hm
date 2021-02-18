@@ -1,11 +1,17 @@
 <?php
 use src\oop\Calculator;
+use src\oop\Commands\DivisionCommand;
+use src\oop\Commands\ExponentiationCommand;
+use src\oop\Commands\MultiplicationCommand;
 use src\oop\Commands\SubCommand;
 use src\oop\Commands\SumCommand;
 
 $calc = new Calculator();
 $calc->addCommand('+', new SumCommand());
 $calc->addCommand('-', new SubCommand());
+$calc->addCommand('*', new MultiplicationCommand());
+$calc->addCommand('/', new DivisionCommand());
+$calc->addCommand('^', new ExponentiationCommand());
 
 // You can use any operation for computing
 // will output 2
@@ -24,7 +30,6 @@ echo $calc->init(15)
 
 echo PHP_EOL;
 
-// TODO implement replay method
 // should output 4
 echo $calc->init(1)
     ->compute('+', 1)
@@ -34,7 +39,6 @@ echo $calc->init(1)
 
 echo PHP_EOL;
 
-// TODO implement undo method
 // should output 1
 echo $calc->init(1)
     ->compute('+', 5)
@@ -44,3 +48,32 @@ echo $calc->init(1)
     ->getResult();
 
 echo PHP_EOL;
+
+
+// should output 24
+echo $calc->init(1)
+    ->compute('+', 5)
+    ->compute('*', 2)
+    ->replay()
+    ->getResult();
+
+echo PHP_EOL;
+
+
+// should output 1
+echo $calc->init(1)
+    ->compute('*', 5)
+    ->compute('/', 5)
+    ->getResult();
+
+echo PHP_EOL;
+
+
+// should output 16
+echo $calc->init(1)
+    ->compute('+', 1)
+    ->compute('^', 4)
+    ->getResult();
+
+echo PHP_EOL;
+

@@ -12,38 +12,24 @@
  */
 function getMinuteQuarter(int $minute)
 {
-    if ($minute < 0 && $minute > 59) {
+    if ($minute < 0 || $minute > 59) {
+        print_r(123);
         throw new InvalidArgumentException('getMinuteQuarter function only accepts integer between 0 and 59. Input was: ' . $minute);
     }
 
-    if (0 === $minute) {
-        $quarter = 'fourth';
-    } elseif ($minute < 16) {
-        $quarter = 'first';
-    } elseif ($minute < 31) {
-        $quarter = 'second';
-    } elseif ($minute < 46) {
-        $quarter = 'third';
-    } else {
-        $quarter = 'fourth';
+    switch (ceil($minute/15)) {
+        case '1':
+            $quarter = 'first';
+            break;
+        case '2':
+            $quarter = 'second';
+            break;
+        case '3':
+            $quarter = 'third';
+            break;
+        default:
+            $quarter = 'fourth';
     }
-
-//    switch (intval($minute/15)) {
-//        case '0':
-//            $quarter = 'first';
-//            break;
-//        case '1':
-//            $quarter = 'second';
-//            break;
-//        case '2':
-//            $quarter = 'third';
-//            break;
-//        case '3':
-//            $quarter = 'fourth';
-//            break;
-//        default:
-//            $quarter = false;
-//    }
 
     return $quarter;
 }
