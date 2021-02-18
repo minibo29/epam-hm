@@ -126,6 +126,10 @@ class Calculator
      */
     public function undo()
     {
+        if (!count($this->intents)) {
+            throw new \InvalidArgumentException(sprintf('Can\'t undo Command.'));
+        }
+
         array_pop($this->intents);
 
         return $this;
@@ -138,6 +142,10 @@ class Calculator
      */
     public function replay()
     {
+        if (!count($this->intents)) {
+            throw new \InvalidArgumentException(sprintf('Can\'t replay Command.'));
+        }
+
         $this->intents[] =end($this->intents);
         reset($this->intents);
 
