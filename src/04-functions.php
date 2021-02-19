@@ -76,13 +76,8 @@ function countArgumentsWrapper()
 
     foreach ($args as $arg) {
         if (!is_string($arg)) {
-            $exception = true;
-            break;
+            throw new InvalidArgumentException('countArgumentsWrapper function Exception');
         }
-    }
-
-    if ($exception) {
-        throw new InvalidArgumentException('countArgumentsWrapper function Exception');
     }
 
     return countArguments(...$args);
