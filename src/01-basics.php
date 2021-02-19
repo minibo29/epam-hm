@@ -13,7 +13,6 @@
 function getMinuteQuarter(int $minute)
 {
     if ($minute < 0 || $minute > 59) {
-        print_r(123);
         throw new InvalidArgumentException('getMinuteQuarter function only accepts integer between 0 and 59. Input was: ' . $minute);
     }
 
