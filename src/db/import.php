@@ -22,9 +22,9 @@ foreach (require_once('../web/airports.php') as $item) {
 
 function getEntityByName(\PDO $pdo, $entityTable, $name)
 {
-    $sth = $pdo->prepare('SELECT id FROM :table WHERE name = :name');
+    $sth = $pdo->prepare('SELECT id FROM `' . $entityTable . '` WHERE name = :name');
     $sth->setFetchMode(\PDO::FETCH_ASSOC);
-    $sth->execute(['table' => $entityTable, 'name' => $name]);
+    $sth->execute(['name' => $name]);
 
     return $sth->fetch();
 }
@@ -54,7 +54,7 @@ function importState(\PDO $pdo, $item)
 
 function importCity(\PDO $pdo, $item, $stateId = null)
 {
-    $city = getEntityByName($pdo, 'cities', $item['state']);
+    $city = getEntityByName($pdo, 'cities', $item['city']);
 
     // If result is empty - we need to INSERT city
     if (!$city) {
@@ -66,7 +66,7 @@ function importCity(\PDO $pdo, $item, $stateId = null)
         }
 
 
-        $sth = $pdo->prepare('INSERT INTO cities (name, state_id) VALUES (:name)');
+        $sth = $pdo->prepare('INSERT INTO cities (name, state_id) VALUES (:name, :state_id)');
         $sth->execute([
             'name' => $item['city'],
             'state_id' => $stateId
@@ -92,7 +92,7 @@ function importCity(\PDO $pdo, $item, $stateId = null)
  */
 function importAirport(\PDO $pdo, $item, $cityId = null)
 {
-    $airport = getEntityByName($pdo, 'airports', $item['state']);
+    $airport = getEntityByName($pdo, 'airports', $item['name']);
 
     // If result is empty - we need to INSERT city
     if (!$airport) {

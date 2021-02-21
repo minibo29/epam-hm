@@ -31,12 +31,12 @@ $uniqueFirstLetters = getUniqueFirstLetters($pdo);
  * where A - requested filter value
  */
 $filters = [];
-if (!empty($url_params['filter_by_first_letter'])) {
-    $filters[] = 'LEFT(name, 1) = "' . $url_params['filter_by_first_letter'] . '"';
+if (!empty($_GET['filter_by_first_letter'])) {
+    $filters[] = 'LEFT(airports.name, 1) = "' . $_GET['filter_by_first_letter'] . '"';
 }
 
-if (!empty($url_params['filter_by_state'])) {
-    $filters[] = 'state = "' . $url_params['filter_by_first_letter'] . '"';
+if (!empty($_GET['filter_by_state'])) {
+    $filters[] = 'states.name = "' . $_GET['filter_by_state'] . '"';
 }
 
 // Sorting
@@ -48,7 +48,7 @@ if (!empty($url_params['filter_by_state'])) {
  * For sorting use ORDER BY A
  * where A - requested filter value
  */
-$sort_by = !empty($url_params['sort']) ? $url_params['sort'] : 'name';
+$sort_by = !empty($_GET['sort']) ? $_GET['sort'] : 'name';
 
 // Pagination
 /**
@@ -59,9 +59,10 @@ $sort_by = !empty($url_params['sort']) ? $url_params['sort'] : 'name';
  * For pagination use LIMIT
  * To get the number of all airports matched by filter use COUNT(*) in the SELECT statement with all filters applied
  */
-$page = !empty($url_params['page']) && $url_params['page'] > 0 ? ceil($url_params['page']) : 1;
-$item_pre_page = !empty($url_params['item_pre_page']) ? ceil($url_params['item_pre_page']) : 5;
+$page = (!empty($_GET['page']) && $_GET['page'] > 0) ? ceil($_GET['page']) : 1;
+$item_pre_page = !empty($_GET['item_pre_page']) ? ceil($_GET['item_pre_page']) : 5;
 $count = getAirportsCount($pdo, $filters);
+
 $pagination_info = get_pagination_info($count, $page, $item_pre_page);
 
 /**
@@ -70,7 +71,7 @@ $pagination_info = get_pagination_info($count, $page, $item_pre_page);
  *
  * For city_name and state_name fields you can use alias https://www.mysqltutorial.org/mysql-alias/
  */
-$airports = getAirports($pdo, $filters, $sort_by, $item_pre_page, ($page - 1));
+$airports = getAirports($pdo, $filters, $sort_by, $item_pre_page, ($page - 1) * $item_pre_page);
 
 ?>
 <!doctype html>

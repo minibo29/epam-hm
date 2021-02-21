@@ -12,14 +12,15 @@
 function getUniqueFirstLetters(\PDO $pdo)
 {
     $query = <<<'SQL'
-        SELECT DISTINCT(LEFT (name, 1)) 
+        SELECT DISTINCT(LEFT (name, 1)) as letter 
         FROM airports
+        ORDER BY letter;
     SQL;
 
     $sth = $pdo->prepare($query);
-    $sth->setFetchMode(\PDO::FETCH_ASSOC);
+    $sth->execute();
 
-    $first_letters = $sth->fetchAll();
+    $first_letters = $sth->fetchAll(\PDO::FETCH_COLUMN);
 
     return $first_letters;
 }
@@ -30,19 +31,19 @@ function getUniqueFirstLetters(\PDO $pdo)
  *
  * @param PDO $pdo
  * @param array|NULL $filters
- * @return array
+ * @return int
  */
 function getAirportsCount(\PDO $pdo, array $filters = NULL)
 {
     $query = <<<'SQL'
-        SELECT count(*) 
+        SELECT count(*) as count
         FROM airports
         JOIN cities on cities.id = airports.city_id
         JOIN states on states.id = cities.state_id
     SQL;
 
-    if (!empty($filter)) {
-        $query .= 'WHERE 1';
+    if (!empty($filters)) {
+        $query .= ' WHERE 1';
         foreach ($filters as $filter){
             $query .= ' AND ' . $filter;
         }
@@ -50,9 +51,10 @@ function getAirportsCount(\PDO $pdo, array $filters = NULL)
 
     $sth = $pdo->prepare($query);
     $sth->setFetchMode(\PDO::FETCH_ASSOC);
+    $sth->execute();
 
-    $airports = $sth->fetchAll();
-    return $airports;
+    $result = $sth->fetch();
+    return !empty($result) ? $result['count'] : 0;
 }
 /**
  *
@@ -68,16 +70,16 @@ function getAirportsCount(\PDO $pdo, array $filters = NULL)
 function getAirports(\PDO $pdo, array $filters = NULL, string $sort_by = NULL, int $limit = NULL, int $offset = NULL)
 {
     $query = <<<'SQL'
-        SELECT * 
+        SELECT airports.id, airports.name, airports.address, airports.code, cities.name as city, states.name as state, timezone 
         FROM airports
         JOIN cities on cities.id = airports.city_id
         JOIN states on states.id = cities.state_id
     SQL;
 
-    if (!empty($filter)) {
-        $query .= 'WHERE 1';
+    if (!empty($filters)) {
+        $query .= ' WHERE 1';
         foreach ($filters as $filter){
-            $query .= ' AND ' . $filter;
+            $query .= ' AND ' . $filter . '';
         }
     }
 
@@ -90,13 +92,15 @@ function getAirports(\PDO $pdo, array $filters = NULL, string $sort_by = NULL, i
     }
 
     if ($limit && $offset) {
-        $query .= ' OFFSET ' . $limit;
+        $query .= ' OFFSET ' . $offset;
     }
 
     $sth = $pdo->prepare($query);
     $sth->setFetchMode(\PDO::FETCH_ASSOC);
+    $sth->execute();
 
     $airports = $sth->fetchAll();
+
     return $airports;
 }
 
@@ -107,6 +111,9 @@ function getAirports(\PDO $pdo, array $filters = NULL, string $sort_by = NULL, i
 function get_url_params()
 {
     $urlArr = parse_url($_SERVER['REQUEST_URI']);
+    if (empty($urlArr['query'])) {
+        return [];
+    }
     parse_str($urlArr['query'], $output);
     return $output;
 }
