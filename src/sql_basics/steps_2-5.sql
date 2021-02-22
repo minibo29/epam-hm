@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `blog`.`roles` (
   `name` VARCHAR(45) NOT NULL,
   `title` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`));
-  
+
   CREATE TABLE IF NOT EXISTS `blog`.`user_roles` (
   `user_id` INT NOT NULL,
   `role_id` INT NOT NULL REFERENCES `blog`.`roles` (`id`),
@@ -34,20 +34,20 @@ CREATE TABLE IF NOT EXISTS `blog`.`posts` (
   `title` VARCHAR(255) NOT NULL,
   `text` LONGTEXT NOT NULL,
   `image` VARCHAR(255) NULL,
-  `autor` INT NULL ,
+  `autor_id` INT NULL ,
   `active` SMALLINT(1) UNSIGNED NOT NULL DEFAULT 1,
   `reviewed` SMALLINT(1) UNSIGNED NOT NULL DEFAULT 0,
   `createAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updateAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`autor`)
+  FOREIGN KEY (`autor_id`)
         REFERENCES `blog`.`users`(`id`)
         ON DELETE SET NULL
   );
-  
-  
-INSERT INTO `blog`.`users` (`first_name`, `last_name`, `email`, `password`, `active`) 
-  VALUES 
+
+
+INSERT INTO `blog`.`users` (`first_name`, `last_name`, `email`, `password`, `active`)
+  VALUES
 	('Tom', 'Cuper', 'tom_cuper@gnail.com', '$2y$12$lLbXnm1rjIKzZuAHUEhLE.6OzBnxbE8U3Gu/G6Hp1w6VTRYkVHArK ', '1'),
 	('Ervin', 'Howell', 'shanna@melissa.tv', '$2y$12$lLbXnm1rjIKzZuAHUEhLE.6OzBnxbE8U3Gu/G6Hp1w6VTRYkVHArK ', '1'),
 	('Clementine', 'Bauch', 'clementine@gnail.com', '$2y$12$lLbXnm1rjIKzZuAHUEhLE.6OzBnxbE8U3Gu/G6Hp1w6VTRYkVHArK ', '0'),
@@ -55,22 +55,22 @@ INSERT INTO `blog`.`users` (`first_name`, `last_name`, `email`, `password`, `act
 	('Chelsey', 'Dietrich', 'Lucio_Hettinger@annie.ca', '$2y$12$lLbXnm1rjIKzZuAHUEhLE.6OzBnxbE8U3Gu/G6Hp1w6VTRYkVHArK ', '1');
 
 
-INSERT INTO `blog`.`roles` (`name`, `title`) 
-  VALUES 
+INSERT INTO `blog`.`roles` (`name`, `title`)
+  VALUES
 	('admin', 'Admin'),
 	('autor', 'Aautor'),
 	('corespondent', 'Corespondent');
-  
-  
-INSERT INTO `blog`.`user_roles` (`user_id`, `role_id`) 
-  VALUES 
+
+
+INSERT INTO `blog`.`user_roles` (`user_id`, `role_id`)
+  VALUES
 	('1', '1'),
 	('2', '2'),
 	('4', '2'),
 	('4', '3');
-  
-  
-INSERT INTO `blog`.`posts` (`title`, `text`, `image`, `autor`, `active`, `reviewed`)
+
+
+INSERT INTO `blog`.`posts` (`title`, `text`, `image`, `autor_id`, `active`, `reviewed`)
   VALUES
 	(
 		"Tunt aut facere repellat provident occaecati excepturi optio reprehenderit",
@@ -129,5 +129,4 @@ INSERT INTO `blog`.`posts` (`title`, `text`, `image`, `autor`, `active`, `review
         "0"
     );
 
-    
-    
+
