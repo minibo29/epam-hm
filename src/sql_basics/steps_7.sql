@@ -13,7 +13,7 @@ SELECT * FROM blog.posts WHERE reviewed = 0;
 SELECT COUNT(posts.id) as count,users.id, users.first_name, users.last_name, email  FROM posts
 	JOIN users on posts.autor_id = users.id
 	WHERE posts.active = 1
-    GROUP BY id, first_name, last_name, email;
+    GROUP BY id;
 
 -- Select all active posts of users
 SELECT posts.*, users.first_name, users.last_name FROM posts
